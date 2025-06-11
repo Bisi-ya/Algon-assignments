@@ -16,6 +16,71 @@
   Once you've implemented the logic, test your code by running
 */
 
-class Calculator {}
+  class Calculator {
+  constructor() {
+    this.result = 0;
+  }
 
+  add(number) {
+    this.result += number;
+  }
+
+  subtract(number) {
+    this.result -= number;
+  }
+
+  multiply(number) {
+    this.result *= number;
+  }
+
+  divide(number) {
+    if (number === 0) {
+      throw new Error("Cannot divide by zero");
+    }
+    this.result /= number;
+  }
+
+  clear() {
+    this.result = 0;
+  }
+
+  getResult() {
+    return this.result;
+  }
+
+  calculate(expression) {
+    try {
+      const cleanedExpression = expression.replace(/\s+/g, ' ').trim();
+      if (!/^[0-9+\-*/().\s]+$/.test(cleanedExpression)) {
+        throw new Error("Invalid characters in expression");
+      }
+      const evaluatedResult = eval(cleanedExpression); 
+      if (isNaN(evaluatedResult) || !isFinite(evaluatedResult)) {
+        throw new Error("Invalid mathematical expression");
+      }
+
+      this.result = evaluatedResult;
+    } catch (error) {
+      throw new Error("Invalid expression: " + error.message);
+    }
+  }
+}
+
+module.exports = Calculator;
+
+const calc = new Calculator();
+
+calc.add(5);
+calc.multiply(2);
+console.log(calc.getResult());  
+
+calc.clear();
+calc.calculate("10 +   2 *    (   6 - (4 + 1) / 2) + 7");
+console.log(calc.getResult());  
+
+try {
+  calc.calculate("5 + a@b%c"); 
+} catch (err) {
+  console.log(err.message); 
+}
 module.exports = Calculator;
